@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مُلَخَّص — ذكاء اصطناعي لاجتماعاتك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100E17;
+    --bg-2:#171420;
+    --card:#1C1826;
+    --card-2:#221D2E;
+    --text:#F3F1FA;
+    --muted:#9A91AE;
+    --line:#2C2739;
+    --violet:#8B6BFF;
+    --teal:#2FE0C6;
+    --pink:#FF5FA2;
+    --danger:#FF6B6B;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 600px at 85% -10%, rgba(139,107,255,.25), transparent 60%),
+      radial-gradient(900px 500px at -10% 20%, rgba(47,224,198,.16), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans Arabic', sans-serif;
+    line-height:1.65;
+    min-height:100vh;
+  }
+  .wrap{
+    max-width:1160px;
+    margin:0 auto;
+    padding:0 28px 90px;
+  }
+
+  /* ---- شريط علوي ---- */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:26px 0;
+  }
+  .mark{
+    font-family:'Space Grotesk', 'IBM Plex Sans Arabic', sans-serif;
+    font-weight:700;
+    font-size:20px;
+    letter-spacing:.02em;
+    background:linear-gradient(90deg, var(--violet), var(--teal));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .pill{
+    font-size:12.5px;
+    color:var(--muted);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:6px 14px;
+  }
+
+  /* ---- البطل ---- */
+  .hero{
+    padding:36px 0 54px;
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:40px;
+    align-items:center;
+  }
+  @media (max-width:900px){ .hero{grid-template-columns:1fr;} }
+  .hero h1{
+    font-size:clamp(38px,5.2vw,58px);
+    line-height:1.15;
+    margin:0 0 18px;
+    font-weight:700;
+  }
+  .hero h1 .glow{
+    background:linear-gradient(90deg, var(--violet), var(--pink) 60%, var(--teal));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p{
+    color:var(--muted);
+    font-size:17px;
+    max-width:460px;
+    margin:0 0 26px;
+  }
+  .hero-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .tag{
+    font-size:13px;
+    color:var(--text);
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:7px 14px;
+  }
+
+  /* ---- موجة صوتية زخرفية ---- */
+  .waveform{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    height:220px;
+    background:radial-gradient(circle at 50% 50%, rgba(139,107,255,.18), transparent 70%);
+    border-radius:24px;
+    border:1px solid var(--line);
+    padding:20px;
+  }
+  .waveform span{
+    width:6px;
+    border-radius:6px;
+    background:linear-gradient(180deg, var(--teal), var(--violet));
+    animation:wave 1.4s ease-in-out infinite;
+  }
+  @keyframes wave{
+    0%,100%{height:18px; opacity:.55;}
+    50%{height:100px; opacity:1;}
+  }
+
+  /* ---- منطقة العمل ---- */
+  .layout{
+    display:grid;
+    grid-template-columns:1.15fr 1fr;
+    gap:26px;
+  }
+  @media (max-width:900px){ .layout{grid-template-columns:1fr;} }
+
+  .panel{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:24px;
+  }
+  .panel-input{
+    border-right:2px solid transparent;
+    border-image:linear-gradient(180deg, var(--violet), var(--teal)) 1;
+  }
+  .panel-title{
+    font-size:14px;
+    color:var(--muted);
+    margin:0 0 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  select{
+    background:var(--card-2);
+    color:var(--text);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:8px 12px;
+    font-family:inherit;
+    font-size:13.5px;
+    cursor:pointer;
+  }
+
+  textarea{
+    width:100%;
+    min-height:300px;
+    border:none;
+    background:transparent;
+    resize:vertical;
+    font-family:'IBM Plex Sans Arabic', sans-serif;
+    font-size:15.5px;
+    line-height:1.8;
+    color:var(--text);
+    outline:none;
+  }
+  textarea::placeholder{color:var(--muted);}
+
+  .row{
+    display:flex;
+    gap:10px;
+    margin-top:16px;
+    flex-wrap:wrap;
+  }
+  button{
+    font-family:inherit;
+    font-size:14.5px;
+    cursor:pointer;
+    border-radius:12px;
+    padding:12px 20px;
+    border:1px solid transparent;
+    transition:transform .12s ease, box-shadow .15s ease, opacity .12s ease;
+  }
+  button:active{transform:scale(0.97);}
+  .btn-main{
+    background:linear-gradient(90deg, var(--violet), var(--pink));
+    color:#fff;
+    font-weight:600;
+  }
+  .btn-main:hover{box-shadow:0 8px 24px rgba(139,107,255,.35);}
+  .btn-main:disabled{opacity:.5; cursor:default; box-shadow:none;}
+  .btn-ghost{
+    background:transparent;
+    border-color:var(--line);
+    color:var(--text);
+  }
+  .btn-ghost:hover{border-color:var(--teal);}
+  .btn-mic{
+    background:var(--card-2);
+    border-color:var(--line);
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    gap:9px;
+  }
+  .btn-mic.recording{
+    border-color:var(--danger);
+    color:var(--danger);
+  }
+  .mic-dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--muted);
+    flex:none;
+  }
+  .btn-mic.recording .mic-dot{
+    background:var(--danger);
+    animation:pulse 1.1s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1; transform:scale(1);}
+    50%{opacity:.4; transform:scale(1.3);}
+  }
+  .status{
+    font-size:13.5px;
+    color:var(--muted);
+    margin-top:10px;
+    min-height:20px;
+  }
+
+  .output-col{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+  .summary-frame{
+    background:linear-gradient(135deg, rgba(47,224,198,.12), rgba(139,107,255,.08));
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:20px 22px;
+  }
+  .summary-frame h3{
+    margin:0 0 8px;
+    font-size:16px;
+    color:var(--teal);
+    font-weight:600;
+  }
+  .summary-frame p{
+    margin:0;
+    font-size:15px;
+    color:var(--text);
+  }
+  .tasks h3{
+    margin:0 0 12px;
+    font-size:16px;
+    font-weight:600;
+  }
+  .task{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    background:var(--card-2);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:10px;
+  }
+  .task .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--pink);
+    margin-top:7px;
+    flex:none;
+  }
+  .task-body{flex:1;}
+  .task-title{font-size:15px; margin:0 0 4px;}
+  .task-meta{
+    font-size:12.5px;
+    color:var(--muted);
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .task-meta span b{color:var(--text); font-weight:600;}
+  .empty{
+    color:var(--muted);
+    font-size:14.5px;
+    padding:34px 6px;
+    text-align:center;
+    border:1px dashed var(--line);
+    border-radius:14px;
+  }
+
+  .proto-note{
+    margin-top:36px;
+    font-size:13px;
+    color:var(--muted);
+    border-top:1px solid var(--line);
+    padding-top:16px;
+  }
+
+  footer.contact{
+    margin-top:56px;
+    padding:32px 0 10px;
+    border-top:1px solid var(--line);
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+  }
+  .contact h3{
+    font-size:18px;
+    margin:0 0 6px;
+    font-weight:600;
+  }
+  .contact p{
+    margin:0;
+    color:var(--muted);
+    font-size:14px;
+    max-width:420px;
+  }
+  .btn-contact{
+    background:var(--card-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    white-space:nowrap;
+    text-decoration:none;
+    display:inline-block;
+  }
+  .btn-contact:hover{border-color:var(--teal);}
+
+  /* ---- تسجيل الدخول ---- */
+  .user-badge{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .btn-logout{
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:6px 14px;
+    font-size:12.5px;
+    border-radius:999px;
+  }
+  .btn-logout:hover{border-color:var(--danger); color:var(--danger);}
+
+  .auth-overlay{
+    position:fixed;
+    inset:0;
+    background:var(--bg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:50;
+    padding:20px;
+  }
+  .auth-box{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:34px;
+    width:100%;
+    max-width:380px;
+    text-align:center;
+  }
+  .auth-box .mark{
+    display:block;
+    margin-bottom:6px;
+    font-size:22px;
+  }
+  .auth-box p.sub{
+    color:var(--muted);
+    font-size:14px;
+    margin:0 0 22px;
+  }
+  .auth-box input{
+    width:100%;
+    background:var(--card-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:10px;
+    padding:12px 14px;
+    font-family:inherit;
+    font-size:14.5px;
+    margin-bottom:12px;
+    outline:none;
+  }
+  .auth-box input:focus{border-color:var(--violet);}
+  .auth-box .btn-main{
+    width:100%;
+    padding:13px;
+    margin-top:4px;
+  }
+  .auth-switch{
+    margin-top:16px;
+    font-size:13.5px;
+    color:var(--muted);
+  }
+  .auth-switch a{
+    color:var(--teal);
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .auth-msg{
+    font-size:13px;
+    min-height:18px;
+    margin-top:10px;
+    color:var(--pink);
+  }
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<!-- شاشة تسجيل الدخول / إنشاء حساب -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-box">
+    <span class="mark">مُلَخَّص</span>
+    <p class="sub" id="authSub">سجّل دخول أو أنشئ حساب جديد للمتابعة</p>
+    <input type="email" id="authEmail" placeholder="البريد الإلكتروني" autocomplete="email">
+    <input type="password" id="authPassword" placeholder="كلمة المرور" autocomplete="current-password">
+    <button class="btn-main" id="authSubmit">تسجيل الدخول</button>
+    <p class="auth-msg" id="authMsg"></p>
+    <p class="auth-switch" id="authSwitch">ما عندك حساب؟ <a id="authToggleLink">أنشئ واحد</a></p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <span class="mark">مُلَخَّص</span>
+    <div class="user-badge hidden" id="userBadge">
+      <span id="userEmail"></span>
+      <button class="btn-logout" id="logoutBtn">تسجيل خروج</button>
+    </div>
+    <span class="pill" id="topPill">مدعوم بالذكاء الاصطناعي</span>
+  </div>
+
+  <section class="hero">
+    <div>
+      <h1>من أي اجتماع، <span class="glow">بأي لغة</span>، إلى ملخص ومهام جاهزة</h1>
+      <p>سجّل اجتماعك مباشرة أو الصق نصه — بأي لغة كان — وخلي الذكاء الاصطناعي يطلعلك الملخص وقائمة المهام خلال ثواني.</p>
+      <div class="hero-tags">
+        <span class="tag">تسجيل مباشر</span>
+        <span class="tag">دعم لغات متعددة</span>
+        <span class="tag">مهام جاهزة فوراً</span>
+      </div>
+    </div>
+    <div class="waveform" aria-hidden="true">
+      <span style="animation-delay:0s"></span>
+      <span style="animation-delay:.1s"></span>
+      <span style="animation-delay:.2s"></span>
+      <span style="animation-delay:.3s"></span>
+      <span style="animation-delay:.4s"></span>
+      <span style="animation-delay:.5s"></span>
+      <span style="animation-delay:.6s"></span>
+      <span style="animation-delay:.7s"></span>
+      <span style="animation-delay:.8s"></span>
+      <span style="animation-delay:.9s"></span>
+      <span style="animation-delay:1s"></span>
+    </div>
+  </section>
+
+  <div class="layout">
+    <div class="panel panel-input">
+      <p class="panel-title">
+        <span>نص الاجتماع</span>
+        <select id="langSelect"></select>
+      </p>
+      <textarea id="transcript" placeholder="الصق نص الاجتماع هون، أو اضغط ابدأ التسجيل واحكي بأي لغة اخترتها..."></textarea>
+      <div class="row">
+        <button class="btn-mic" id="micBtn"><span class="mic-dot" id="micDot"></span>ابدأ التسجيل المباشر</button>
+        <button class="btn-main" id="summarizeBtn">لخّص الاجتماع</button>
+        <button class="btn-ghost" id="sampleBtn">جرّب بمثال</button>
+      </div>
+      <p class="status" id="status"></p>
+    </div>
+
+    <div class="panel output-col">
+      <p class="panel-title"><span>النتيجة</span></p>
+      <div id="results">
+        <div class="empty">لسا ما في نتيجة — الصق نص اجتماع أو سجّل، وبعدين اضغط "لخّص الاجتماع"</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="proto-note">هاي نسخة تجريبية أولية (Prototype) — الملخص بيرجع بنفس لغة الاجتماع تلقائياً.</p>
+
+  <footer class="contact">
+    <div>
+      <h3>عندك ملاحظة أو مشكلة؟</h3>
+      <p>إذا واجهتك مشكلة، أو عندك اقتراح لميزة بدك نضيفها، ابعتلنا.</p>
+    </div>
+    <a class="btn-contact" href="mailto:YOUR-EMAIL@example.com?subject=ملاحظة%20عن%20موقع%20ملخّص">راسلنا</a>
+  </footer>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://ikftrfwapzxxkadvfbge.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_XcQ2kJElKJHCLPcV7U8BfA_qTV_ulFF';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const authOverlay = document.getElementById('authOverlay');
+const authEmail = document.getElementById('authEmail');
+const authPassword = document.getElementById('authPassword');
+const authSubmit = document.getElementById('authSubmit');
+const authMsg = document.getElementById('authMsg');
+const authSub = document.getElementById('authSub');
+const authSwitch = document.getElementById('authSwitch');
+const authToggleLink = document.getElementById('authToggleLink');
+const userBadge = document.getElementById('userBadge');
+const userEmail = document.getElementById('userEmail');
+const topPill = document.getElementById('topPill');
+const logoutBtn = document.getElementById('logoutBtn');
+
+let mode = 'login'; // or 'signup'
+
+function setMode(newMode){
+  mode = newMode;
+  authMsg.textContent = '';
+  if(mode === 'login'){
+    authSub.textContent = 'سجّل دخول للمتابعة';
+    authSubmit.textContent = 'تسجيل الدخول';
+    authSwitch.innerHTML = 'ما عندك حساب؟ <a id="authToggleLink">أنشئ واحد</a>';
+  }else{
+    authSub.textContent = 'أنشئ حساب جديد بثواني';
+    authSubmit.textContent = 'إنشاء حساب';
+    authSwitch.innerHTML = 'عندك حساب أصلاً؟ <a id="authToggleLink">سجّل دخول</a>';
+  }
+  document.getElementById('authToggleLink').addEventListener('click', () => {
+    setMode(mode === 'login' ? 'signup' : 'login');
+  });
+}
+setMode('login');
+
+authSubmit.addEventListener('click', async () => {
+  const email = authEmail.value.trim();
+  const password = authPassword.value;
+  if(!email || !password){
+    authMsg.textContent = 'عبّي الإيميل وكلمة المرور.';
+    return;
+  }
+  authSubmit.disabled = true;
+  authMsg.style.color = 'var(--muted)';
+  authMsg.textContent = 'لحظة…';
+
+  const action = mode === 'login'
+    ? supabase.auth.signInWithPassword({ email, password })
+    : supabase.auth.signUp({ email, password });
+
+  const { data, error } = await action;
+  authSubmit.disabled = false;
+
+  if(error){
+    authMsg.style.color = 'var(--pink)';
+    authMsg.textContent = error.message;
+    return;
+  }
+
+  if(mode === 'signup' && !data.session){
+    authMsg.style.color = 'var(--teal)';
+    authMsg.textContent = 'تحقق من إيميلك لتأكيد الحساب، بعدين سجّل دخول.';
+    return;
+  }
+
+  showApp(data.session.user);
+});
+
+logoutBtn.addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  location.reload();
+});
+
+function showApp(user){
+  authOverlay.classList.add('hidden');
+  userBadge.classList.remove('hidden');
+  topPill.classList.add('hidden');
+  userEmail.textContent = user.email;
+}
+
+(async () => {
+  const { data: { session } } = await supabase.auth.getSession();
+  if(session){
+    showApp(session.user);
+  }
+})();
+</script>
+
+<script>
+// ---- قائمة اللغات المدعومة للتسجيل المباشر ----
+const LANGUAGES = [
+  { code: 'ar-SA', label: 'العربية' },
+  { code: 'en-US', label: 'الإنجليزية' },
+  { code: 'fr-FR', label: 'الفرنسية' },
+  { code: 'es-ES', label: 'الإسبانية' },
+  { code: 'de-DE', label: 'الألمانية' },
+  { code: 'tr-TR', label: 'التركية' },
+  { code: 'hi-IN', label: 'الهندية' },
+  { code: 'ur-PK', label: 'الأردية' },
+  { code: 'zh-CN', label: 'الصينية' },
+  { code: 'ja-JP', label: 'اليابانية' },
+  { code: 'ru-RU', label: 'الروسية' },
+  { code: 'pt-BR', label: 'البرتغالية' },
+  { code: 'it-IT', label: 'الإيطالية' },
+  { code: 'fa-IR', label: 'الفارسية' }
+];
+
+const langSelect = document.getElementById('langSelect');
+LANGUAGES.forEach(l => {
+  const opt = document.createElement('option');
+  opt.value = l.code;
+  opt.textContent = l.label;
+  langSelect.appendChild(opt);
+});
+
+// ---- نص تجريبي ----
+const sampleTranscript = `منى: خلص، شو وضع مشروع الموقع الجديد؟
+عمر: خلصت تصميم صفحة الهبوط، بس لسا بدي مراجعة من العميل.
+منى: تمام. عمر، ابعتلهم النسخة اليوم وخد موافقة قبل يوم الأحد.
+ليلى: أنا خلصت المحتوى بالعربي، بس محتاجة ترجمة للإنجليزي.
+منى: ليلى، تواصلي مع شركة الترجمة وخديلنا سعر قبل نهاية الأسبوع.
+عمر: كمان لازم نجهز الاستضافة قبل الإطلاق.
+منى: تمام، أنا رح أتابع موضوع الاستضافة بنفسي بكرا الصبح.
+ليلى: طيب، ومتى موعد الإطلاق النهائي؟
+منى: هدفنا الإطلاق يوم الاثنين الجاي، خلونا نلتزم فيه.`;
+
+document.getElementById('sampleBtn').addEventListener('click', () => {
+  document.getElementById('transcript').value = sampleTranscript;
+});
+
+// ---- تسجيل مباشر متعدد اللغات عبر ميزة المتصفح المدمجة ----
+const micBtn = document.getElementById('micBtn');
+const statusEl = document.getElementById('status');
+const transcriptEl = document.getElementById('transcript');
+const SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+let recognition = null;
+let recognizing = false;
+let baseText = '';
+let finalChunk = '';
+
+if(!SpeechRecognitionCtor){
+  micBtn.disabled = true;
+  statusEl.textContent = 'التسجيل المباشر مدعوم حالياً على متصفح Chrome أو Edge فقط.';
+}else{
+  recognition = new SpeechRecognitionCtor();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  recognition.onresult = (event) => {
+    let interim = '';
+    for(let i = event.resultIndex; i < event.results.length; i++){
+      const piece = event.results[i][0].transcript;
+      if(event.results[i].isFinal){
+        finalChunk += piece + ' ';
+      }else{
+        interim += piece;
+      }
+    }
+    transcriptEl.value = (baseText + finalChunk + interim).trim();
+  };
+
+  recognition.onerror = (event) => {
+    if(event.error === 'not-allowed' || event.error === 'service-not-allowed'){
+      statusEl.textContent = 'لازم تسمح باستخدام المايكروفون من إعدادات المتصفح.';
+    }
+    stopRecording();
+  };
+
+  recognition.onend = () => {
+    if(recognizing){
+      recognition.start();
+    }
+  };
+}
+
+function startRecording(){
+  recognition.lang = langSelect.value;
+  baseText = transcriptEl.value ? transcriptEl.value.trim() + ' ' : '';
+  finalChunk = '';
+  recognizing = true;
+  micBtn.classList.add('recording');
+  micBtn.lastChild.textContent = 'إيقاف التسجيل';
+  statusEl.textContent = 'بيسمع هلق باللغة المختارة… احكي أو خلي المايك قريب من صوت الاجتماع.';
+  recognition.start();
+}
+
+function stopRecording(){
+  recognizing = false;
+  micBtn.classList.remove('recording');
+  micBtn.lastChild.textContent = 'ابدأ التسجيل المباشر';
+  statusEl.textContent = '';
+  try{ recognition.stop(); }catch(e){}
+}
+
+micBtn.addEventListener('click', () => {
+  if(!recognition) return;
+  if(recognizing){ stopRecording(); } else { startRecording(); }
+});
+
+langSelect.addEventListener('change', () => {
+  if(recognizing){
+    stopRecording();
+  }
+});
+
+// ---- التلخيص ----
+const resultsEl = document.getElementById('results');
+const btn = document.getElementById('summarizeBtn');
+
+function renderResults(data){
+  const tasksHtml = (data.tasks && data.tasks.length)
+    ? data.tasks.map(t => `
+        <div class="task">
+          <span class="dot"></span>
+          <div class="task-body">
+            <p class="task-title">${escapeHtml(t.task || '')}</p>
+            <div class="task-meta">
+              ${t.owner ? `<span>${escapeHtml(t.owner)}</span>` : ''}
+              ${t.due ? `<span><b>${escapeHtml(t.due)}</b></span>` : ''}
+            </div>
+          </div>
+        </div>`).join('')
+    : '<div class="empty">ما في مهام واضحة بهذا النص</div>';
+
+  resultsEl.innerHTML = `
+    <div class="summary-frame">
+      <h3>الملخص</h3>
+      <p>${escapeHtml(data.summary || '')}</p>
+    </div>
+    <div class="tasks">
+      <h3>المهام</h3>
+      ${tasksHtml}
+    </div>
+  `;
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, s => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[s]));
+}
+
+async function summarize(){
+  const text = transcriptEl.value.trim();
+  if(!text){
+    statusEl.textContent = 'اكتب أو الصق نص الاجتماع أولاً.';
+    return;
+  }
+
+  btn.disabled = true;
+  statusEl.textContent = 'جاري التلخيص…';
+
+  try{
+    const response = await fetch('/api/summarize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+
+    if(!response.ok){
+      throw new Error('server error');
+    }
+
+    const result = await response.json();
+    renderResults(result);
+    statusEl.textContent = 'تم التلخيص.';
+  }catch(err){
+    console.error(err);
+    statusEl.textContent = 'صار خطأ أثناء التلخيص، جرّب مرة ثانية.';
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+btn.addEventListener('click', summarize);
+</script>
+</body>
+</html>
